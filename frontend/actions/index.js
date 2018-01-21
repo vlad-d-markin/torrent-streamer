@@ -63,6 +63,14 @@ export const login = username => {
 
 
 // Tracks
+export const TRACK_SET_SOURCE = "TRACK_SET_SOURCE";
+export const setSourceForTrack = (trackId, sourceId) => {
+    return {
+        type: TRACK_SET_SOURCE,
+        trackId, sourceId
+    }
+}
+
 export const STAGE_TRACKS = "STAGE_TRACKS"
 export const COMMIT_TRACKS_REQUEST = "COMMIT_TRACKS_REQUEST"
 export const COMMIT_TRACKS_SUCCESS = "COMMIT_TRACKS_SUCCESS"

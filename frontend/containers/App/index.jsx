@@ -15,7 +15,7 @@ class App extends React.Component {
     }
 
     render() {
-        var page = (this.props.user.id) ? <TrackPool /> : <LoginForm />;
+        var page = (true || this.props.user.id) ? <TrackPool /> : <LoginForm />;
         return (
             <div className="app-wrapper-container container">
                 {page}

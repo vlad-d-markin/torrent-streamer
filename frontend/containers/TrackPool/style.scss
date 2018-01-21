@@ -1,0 +1,55 @@
+.pool-list li {
+    margin-bottom: 6px;
+}
+
+$track-item-padding: 4px;
+
+.track-item {
+    position: relative;
+    height: 80px;
+    width: 100%;
+    padding: $track-item-padding;
+    overflow: hidden;
+    border: 1px solid grey;
+}
+
+.track-item .track-title {
+    position: absolute;
+    top: $track-item-padding;
+    left: $track-item-padding;
+    bottom: 50%;
+}
+
+.track-item .artist-album-line {
+    position: absolute;
+    top: 50%;
+    left: $track-item-padding;
+    bottom: $track-item-padding;
+}
+
+.track-item .source-slot {
+    position: absolute;
+    top: $track-item-padding;
+    right: $track-item-padding;
+    width: 200px;
+    bottom: $track-item-padding;
+}
+
+.source-plug {
+    border: 1px solid magenta;
+    background: lightblue;
+    overflow: hidden;
+}
+
+.source-plug {
+    border: 1px solid olive;
+    background: lightsalmon;
+    overflow: hidden;
+}
+
+.source-slot .source-plug {
+    width: 95% !important;
+    height: 95% !important;
+    background: green;
+}
+

@@ -2,21 +2,62 @@ import _ from 'lodash'
 import uuid from 'uuid/v4'
 
 import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from 'Actions';
-import { STAGE_TRACKS, COMMIT_TRACKS_REQUEST, COMMIT_TRACKS_SUCCESS, COMMIT_TRACKS_FAILURE } from 'Actions';
+import { TRACK_SET_SOURCE } from 'Actions';
 
 const initialState = {
     user: {
         state: 'none',
         id: null
     },
-    tracks: { list: {}, staged: {} },
     connection: {
         state: 'disconnected',
         clientId: null,
         io: null
     },
     notifications: [],
-    sources: []
+    tracks: {
+        'track_id_1' : {
+            id: 'track_id_1',
+            title: 'Track 1',
+            artist: 'Artist 1',
+            album: 'Album 1',
+            sourceId: 'source_id_1'
+        },
+        'track_id_2' : {
+            id: 'track_id_2',                    
+            title: 'Track 2',
+            artist: 'Artist 2',
+            album: 'Album 2',
+            sourceId: 'source_id_2'
+        },
+        'track_id_3' : {
+            id: 'track_id_3',                    
+            title: 'Track 3',
+            artist: 'Artist 3',
+            album: 'Album 3',
+            sourceId: null
+        }
+    },
+    sources: {
+        'source_id_1': {
+            id: 'source_id_1',
+            name: 'Source 1',
+            infoHash: 'info_hash_1',
+            index: 0
+        },
+        'source_id_2': {
+            id: 'source_id_2',
+            name: 'Source 2',
+            infoHash: 'info_hash_2',
+            index: 2
+        },
+        'source_id_3': {
+            id: 'source_id_3',
+            name: 'Source 3',
+            infoHash: 'info_hash_3',
+            index: 6
+        }
+    }
 }
 
 
@@ -50,27 +91,26 @@ const user = (user, action) => {
 
 const tracks = (tracks, action) => {
     switch(action.type) {
-    case STAGE_TRACKS:
-        return {
-            ...tracks,
-            staged: action.tracks
-        };
-    case COMMIT_TRACKS_SUCCESS:
+    case TRACK_SET_SOURCE:
     {
-        var oldList = tracks.list;
-        return {
-            ...tracks,
-            staged: [],
-            list: {...oldList, ...action.tracks}
-        }
+        var state = {...tracks};
+        state[action.trackId].sourceId = action.sourceId;
+        return state;
     }
     default:
         return tracks;
     }
 }
 
+const sources = (sources, action) => {
+    return sources;
+}
 
-export default (state = initialState, action) => ({
-    user: user(state.user, action),
-    tracks: tracks(state.tracks, action)
-})
+export default (state = initialState, action) => {
+    return {
+        ...state,
+        user: user(state.user, action),
+        tracks: tracks(state.tracks, action),
+        sources: sources(state.sources, action)
+    }
+}

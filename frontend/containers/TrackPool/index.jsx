@@ -1,13 +1,21 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import { stageTracks, commitTracks } from 'Actions'
-import 'Assets/theme.sass'
 import _ from 'lodash';
-import TorrentDropzone from 'Components/TorrentDropzone'
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+
+import { setSourceForTrack } from 'Actions';
+import 'Assets/theme.sass';
+import TorrentDropzone from 'Components/TorrentDropzone';
+import TrackItem from './TrackItem';
+import SourcePlug from './SourcePlug';
+import './style.scss';
+
 
 class TrackPool extends React.Component {
     constructor() {
         super();
+        
     }
 
     handleTorrent(torrents) {
@@ -33,78 +41,66 @@ class TrackPool extends React.Component {
         this.props.commitTracks(this.props.tracks.staged);
     }
 
+    handleSourceUpdate({ source, fromTrack, toTrack }) {
+        if (fromTrack) this.props.setSourceForTrack(fromTrack, null);
+        this.props.setSourceForTrack(toTrack, source.id);
+    }
+
+    isSourceTaken(sourceId, tracks) {
+        return _.find(tracks, (t) => {
+            return t.sourceId === sourceId;
+        });
+    }
+
     render() {
-        var tracks = [];
-        _.each(this.props.tracks.list, (track) => {
-            tracks.push(
-                <tr key={track.id}>
-                    <td>{track.title}</td>
-                    <td>{track.torrent.infoHash}</td>
-                    <td>{track.index}</td>
-                    <td>xx</td>
-                </tr>
-            );
+        var tracks = _.map(this.props.tracks, (t) => {
+            return (
+                <li key={t.id}>
+                    <TrackItem 
+                        key={t.id} 
+                        track={t}
+                        source={this.props.sources[t.sourceId]}
+                        onSourceChange={this.handleSourceUpdate.bind(this)}
+                        />
+                </li>)
+        });
+        const freeSources = _.filter(this.props.sources, (s) => {
+            return !this.isSourceTaken(s.id, this.props.tracks);
+        });
+        const freeSourceItems = _.map(freeSources, (s) => {
+            return (<li key={s.id}><SourcePlug onMoved={this.handleSourceUpdate.bind(this)} key={s.id} source={s} /></li>);
         });
 
-        var staged = [];
-        _.each(this.props.tracks.staged, (track) => {
-            staged.push(
-                <tr key={track.id} className="is-selected">
-                    <td>{track.title}</td>
-                    <td>{track.torrent.infoHash}</td>
-                    <td>{track.index}</td>
-                    <td>x</td>
-                </tr>
-            );
-        });
-
-        return (
-                <div>
-                <table className="table is-striped is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Torrent hash</th>
-                            <th>Index</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <td colSpan={4}>
-                                <TorrentDropzone onTorrents={this.handleTorrent.bind(this)} />
-                                <div className="field is-grouped is-pulled-right">
-                                    <div className="control">
-                                        <a className="button">Cancel</a>
-                                    </div>
-                                    <div className="control">
-                                        <a className="button" onClick={this.handleCommit.bind(this)}>Submit</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        {tracks}
-                        {staged}
-                    </tbody>
-                </table>
+        return(<div className="columns">
+            <div className="column">
+                <h3>Tracks</h3>
+                <ul className="pool-list">
+                    {tracks}
+                </ul>
             </div>
-        );
+            <div className="column">
+                <h3>Sources</h3>
+                <ul>
+                    {freeSourceItems}
+                </ul>
+            </div>
+        </div>)
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        tracks: state.tracks
+        tracks: state.tracks,
+        sources: state.sources
     }
 }
 
 const mapDispatchToProps = (dispatch, state) => {
     return {
-        stageTracks: tracks => { dispatch(stageTracks(tracks)) },
-        commitTracks: tracks => { dispatch(commitTracks(tracks)) }
+        setSourceForTrack: (trackId, sourceId) => { dispatch(setSourceForTrack(trackId, sourceId)) }
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TrackPool)
+export default DragDropContext(HTML5Backend)(
+    connect(mapStateToProps, mapDispatchToProps)(TrackPool)
+)

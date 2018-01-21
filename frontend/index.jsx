@@ -13,5 +13,3 @@ const mountroot = document.getElementById('mountroot');
 ReactDOM.render(<Provider store={store}>
                     <App />
                 </Provider>, mountroot);
-
-console.log(store.getState());
