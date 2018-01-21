@@ -11,7 +11,7 @@ const store = createStore(reducer, applyMiddleware(thunk, createLogger()));
 
 const mountroot = document.getElementById('mountroot');
 ReactDOM.render(<Provider store={store}>
-    <App />
-</Provider>, mountroot);
+                    <App />
+                </Provider>, mountroot);
 
 console.log(store.getState());

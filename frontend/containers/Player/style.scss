@@ -1,0 +1,121 @@
+@import '~Assets/common.scss';
+@import '~Assets/theme.sass';
+
+$player-height: $footer-height; // TODO remove
+
+// Configurable theme vars
+$player-background: #121212 !default;
+$player-color: #dddddd !default;
+$player-color-secondary: #7f7f7f !default;
+$player-color-accent: #ce3623 !default;
+
+$player-font-size: 12pt !default;
+$player-font-size-secondary: 10pt !default;
+
+$player-height: 50px !default;
+
+
+// Constants
+$max-timeline-height: 10px;
+
+// Derived vars
+$player-size-A: $player-height;
+
+$player-min-width: 9 * $player-size-A;
+$player-height-whole: $player-height + $max-timeline-height;
+
+$controls-height: $player-size-A;
+$control-button-width: $player-size-A;
+$control-button-height: $player-size-A;
+
+
+
+.player-wrapper {
+    @extend .floating-bottom-fullwidth;
+    z-index: 9999 !important;
+
+    .player-content {
+        @extend .container;
+        height: $player-height-whole;
+        min-width: $player-min-width;
+        color: $player-color;
+        background: $player-background;
+
+        .player-timeline {
+            height: $max-timeline-height;
+            position: relative;
+
+            div {
+                position: absolute;
+                height: 100%;
+            }
+
+            .player-timeline-cached {
+                background-color: $player-color-secondary;
+                width: 50%;
+            }
+
+            .player-timeline-position {
+                background-color: $player-color-accent;
+                width: 30%;
+            }
+        }
+
+        .player-controls-wrapper {
+            height: $controls-height;
+
+            .player-control-buttons {
+                float: left;
+                height: $controls-height;
+                vertical-align: top;
+
+                .player-control {
+                    display: inline-block;
+                    width: $control-button-width;
+                    height: $control-button-height;
+                    color: $player-color-secondary;
+                    font-size: 14pt;
+                    margin-right: 4px;
+                    text-align: center;
+                    padding-top: 16px; // TODO vertical alignment
+                }
+                .player-control:hover {
+                    color: $player-color;
+                }
+            }
+
+
+
+            .player-track-info-box {
+                float: right;
+                height: $controls-height;
+
+                .player-track-info {
+                    display: inline-block;
+                    white-space: nowrap;
+
+                    text-align: right;
+
+                    .player-track-info-title {
+                        color: $player-color;
+                        font-size: $player-font-size;
+                        font-weight: bolder;
+
+                    }
+                    .player-track-info-subtitle {
+                        color: $player-color-secondary;
+                        font-size: $player-font-size-secondary;
+                        font-weight: normal;
+                    }
+                }
+
+                .player-track-info-art {
+                    display: inline-block;
+                    margin-left: 4px;
+                    width: $control-button-width;
+                    height: $control-button-height;
+                }
+            }
+        }
+    }
+}

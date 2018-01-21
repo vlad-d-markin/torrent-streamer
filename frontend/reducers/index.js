@@ -1,6 +1,15 @@
-import { CONNECT_STREAMER_REQUEST, CONNECT_STREAMER_SUCCESS, CONNECT_STREAMER_FAILURE } from 'Actions';
+import _ from 'lodash'
+import uuid from 'uuid/v4'
+
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from 'Actions';
+import { STAGE_TRACKS, COMMIT_TRACKS_REQUEST, COMMIT_TRACKS_SUCCESS, COMMIT_TRACKS_FAILURE } from 'Actions';
 
 const initialState = {
+    user: {
+        state: 'none',
+        id: null
+    },
+    tracks: { list: {}, staged: {} },
     connection: {
         state: 'disconnected',
         clientId: null,
@@ -10,34 +19,58 @@ const initialState = {
     sources: []
 }
 
-const connection = (connection, action) => {
+
+
+const user = (user, action) => {
     switch(action.type) {
-        case CONNECT_STREAMER_REQUEST:
-            return {
-                ...connection,
-                state: 'connecting'
-            }
-            break;
-        case CONNECT_STREAMER_SUCCESS:
-            return {
-                ...connection,
-                state: 'connected',
-                clientId: action.clientId,
-                io: action.socket
-            }
+    case LOGIN_REQUEST:
+        return {
+            ...user,
+            state: 'in_propgress'
+        }
         break;
-        case CONNECT_STREAMER_FAILURE:
-            return {
-                ...connection,
-                state: 'failure'
-            }
-            break;
-        default:
-            return connection;
-            break;
+    case LOGIN_SUCCESS:
+        return {
+            ...user,
+            state: 'logged_in',
+            id: action.userId
+        }
+        break
+    case LOGIN_FAILURE:
+        return {
+            ...user,
+            state: 'failure'
+        }
+        break;
+    default:
+        return user;
     }
 }
 
+
+const tracks = (tracks, action) => {
+    switch(action.type) {
+    case STAGE_TRACKS:
+        return {
+            ...tracks,
+            staged: action.tracks
+        };
+    case COMMIT_TRACKS_SUCCESS:
+    {
+        var oldList = tracks.list;
+        return {
+            ...tracks,
+            staged: [],
+            list: {...oldList, ...action.tracks}
+        }
+    }
+    default:
+        return tracks;
+    }
+}
+
+
 export default (state = initialState, action) => ({
-    connection: connection(state.connection, action)
+    user: user(state.user, action),
+    tracks: tracks(state.tracks, action)
 })

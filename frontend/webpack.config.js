@@ -29,7 +29,7 @@ var commonConfig = {
             Containers: path.join(__dirname, 'containers'),
             Actions: path.join(__dirname, 'actions'),
             Reducers: path.join(__dirname, 'reducers'),
-            Assets: path.join(__dirname, 'app', 'assets')
+            Assets: path.join(__dirname, 'assets')
         }
     },
 

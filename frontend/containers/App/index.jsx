@@ -1,6 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { connectStreamer } from 'Actions'
+import 'Assets/theme.sass'
+
+import TrackPool from 'Containers/TrackPool'
+import LoginForm from 'Containers/LoginForm'
 
 class App extends React.Component {
     constructor() {
@@ -8,13 +12,13 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        this.props.connect('CLENT ID IS HERE');
     }
 
     render() {
+        var page = (this.props.user.id) ? <TrackPool /> : <LoginForm />;
         return (
-            <div className="app-wrapper">
-                Test here! {this.props.connectionState}
+            <div className="app-wrapper-container container">
+                {page}
             </div>
         );
     }
@@ -22,14 +26,13 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        connectionState: state.connection.state
+        user: state.user,
     }
-};
+}
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        connect: clientId => { dispatch(connectStreamer(clientId)) }
     }
-};
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

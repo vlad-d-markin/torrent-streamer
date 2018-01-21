@@ -1,0 +1,21 @@
+
+.floating-container {
+    position: fixed;
+}
+
+.floating-fullwidth {
+    @extend .floating-container;
+    left: 0;
+    right: 0;
+    height: auto;
+}
+
+.floating-top-fullwidth {
+    @extend .floating-fullwidth;
+    top: 0;
+}
+
+.floating-bottom-fullwidth {
+    @extend .floating-fullwidth;
+    bottom: 0;
+}

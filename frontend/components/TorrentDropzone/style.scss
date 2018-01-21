@@ -1,0 +1,36 @@
+@import '~Assets/theme.sass';
+
+$zone-maxwidth: 460px;
+$zone-maxheight: 120px;
+$zone-minwidth: 220px;
+$zone-minheight: 110px;
+
+$zone-border-color: #666666;
+$zone-border-color-valid: $green;
+$zone-border-color-invalid: $red;
+$zone-background: #eeeeee;
+
+$zone-border-radius: 16px;
+$zone-border-width: 1px;
+
+.file-dropzone {
+    @extend .box;
+
+    min-width: $zone-minwidth;
+    min-height: $zone-minheight;
+
+    border: $zone-border-width solid $zone-border-color;
+    border-radius: $zone-border-radius;
+    background-color: $zone-background;
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+.file-dropzone-valid {
+    border-color: $zone-border-color-valid !important;
+}
+
+.file-dropzone-invalid {
+    border-color: $zone-border-color-invalid !important;
+}
