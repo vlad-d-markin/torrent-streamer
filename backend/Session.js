@@ -1,5 +1,6 @@
 const Track = require('./models/Track');
 const Torrent = require('./models/Torrent');
+const Source = require('./models/Source');
 const _ = require('lodash');
 const async = require('async');
 const Promise = require('bluebird');
@@ -12,6 +13,7 @@ var Session = function(socket, user) {
 
     socket.on('gettracks', this.onGetTracks.bind(this));
     socket.on('addtracks', this.onAddTracks.bind(this));
+    socket.on('addsources', this.onAddSources.bind(this));
 };
 
 Session.prototype.onGetTracks = function(params, cb) {
@@ -72,6 +74,20 @@ Session.prototype.onAddTracks = function(params, cb) {
             // console.log(addedTracks);
             cb(false, addedTracks);
         }
+    });
+};
+
+Session.prototype.onAddSources = function(params, cb) {
+    var sourceData = params.sources;
+    Source.bulkCreate(sourceData).then(records => {
+        var result = {};
+        _.each(records, rec => {
+            result[rec.id] = rec;
+        });
+        cb(false, result);
+    })
+    .catch(error => {
+        cb({ error: error.message });
     });
 };
 

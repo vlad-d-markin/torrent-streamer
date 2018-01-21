@@ -102,13 +102,21 @@ const tracks = (tracks, action) => {
     }
 }
 
-const sources = (sources, action) => {
-    return sources;
+
+import { ADD_SOURCES } from 'Actions';
+
+const sources = (state, action) => {
+    switch(action.type) {
+    case ADD_SOURCES:
+        return {...state, ...action.sources };
+        break;
+    default:
+        return state;
+    }
 }
 
 export default (state = initialState, action) => {
     return {
-        ...state,
         user: user(state.user, action),
         tracks: tracks(state.tracks, action),
         sources: sources(state.sources, action)

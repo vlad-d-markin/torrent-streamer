@@ -5,6 +5,8 @@ import 'Assets/theme.sass'
 
 import TrackPool from 'Containers/TrackPool'
 import LoginForm from 'Containers/LoginForm'
+import { login } from 'Actions'
+
 
 class App extends React.Component {
     constructor() {
@@ -12,6 +14,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        this.props.login('test');
     }
 
     render() {
@@ -32,6 +35,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        login: username => { dispatch(login(username)) }
     }
 }
 

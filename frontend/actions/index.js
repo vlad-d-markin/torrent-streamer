@@ -116,3 +116,19 @@ export const fetchTracks = () => {
         });
     }
 }
+
+// Sources
+export const ADD_SOURCES = "ADD_SOURCES";
+export const addSources = (sources) => {
+    return dispatch => {
+        socket.emit('addsources', { sources }, (error, sources) => {
+            if (error) {
+                console.error('Add sources error on server side', error)
+                // dispatch({ type: FETCH_TRACKS_FAILURE, error })
+            }
+            else {
+                dispatch({ type: ADD_SOURCES, sources });
+            }
+        });
+    };
+}

@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import { setSourceForTrack } from 'Actions';
+import { addSources, setSourceForTrack } from 'Actions';
 import 'Assets/theme.sass';
 import TorrentDropzone from 'Components/TorrentDropzone';
 import TrackItem from './TrackItem';
@@ -19,22 +19,19 @@ class TrackPool extends React.Component {
     }
 
     handleTorrent(torrents) {
-        var tracks = [];
+        var sources = [];
         _.each(torrents, t => {
             _.each(t.torrent.files, (file, index) => {
                 if (file.name.endsWith('.mp3')) {
-                    tracks.push({
-                        title: file.name,
+                    sources.push({
+                        name: file.name,
                         index,
-                        torrent: {
-                            infoHash: t.torrent.infoHash,
-                            name: t.torrent.name
-                        }
+                        infoHash: t.torrent.infoHash
                     });
                 }
             });
         });
-        this.props.stageTracks(tracks);
+        this.props.addSources(sources);
     }
 
     handleCommit() {
@@ -62,13 +59,21 @@ class TrackPool extends React.Component {
                         source={this.props.sources[t.sourceId]}
                         onSourceChange={this.handleSourceUpdate.bind(this)}
                         />
-                </li>)
+                </li>
+            );
         });
         const freeSources = _.filter(this.props.sources, (s) => {
             return !this.isSourceTaken(s.id, this.props.tracks);
         });
         const freeSourceItems = _.map(freeSources, (s) => {
-            return (<li key={s.id}><SourcePlug onMoved={this.handleSourceUpdate.bind(this)} key={s.id} source={s} /></li>);
+            return (
+                <li key={s.id}>
+                    <SourcePlug 
+                        key={s.id}
+                        onMoved={this.handleSourceUpdate.bind(this)}
+                        source={s} />
+                </li>
+            );
         });
 
         return(<div className="columns">
@@ -84,6 +89,7 @@ class TrackPool extends React.Component {
                     {freeSourceItems}
                 </ul>
             </div>
+            <TorrentDropzone onTorrents={this.handleTorrent.bind(this)} />
         </div>)
     }
 }
@@ -97,7 +103,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, state) => {
     return {
-        setSourceForTrack: (trackId, sourceId) => { dispatch(setSourceForTrack(trackId, sourceId)) }
+        addSources: sources => { dispatch(addSources(sources)); },
+        setSourceForTrack: (trackId, sourceId) => { dispatch(setSourceForTrack(trackId, sourceId)); }
     }
 }
 
