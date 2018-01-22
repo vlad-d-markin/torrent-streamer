@@ -1,6 +1,7 @@
 const merge = require('webpack-merge');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const parts = require('./webpack.parts');
 
 const PATHS = {
@@ -11,11 +12,12 @@ const PATHS = {
 
 var commonConfig = {
     entry: {
-        app: PATHS.app
+        app: PATHS.app,
+        vendor: ["react"]
     },
     output: {
         path: PATHS.build,
-        filename: 'bundle.js'
+        filename: '[name].js'
     },
     devtool: 'source-map',
     target: 'web',
@@ -38,6 +40,9 @@ var commonConfig = {
         new HtmlWebpackPlugin({
             title: 'Torrent streamer',
             template: PATHS.indexTemplate
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "vendor",
         })
     ]
 };
@@ -47,6 +52,7 @@ var config = merge([
     parts.loadCSS(),
     parts.loadLESS(),
     parts.loadSCSS(),
+    parts.loadFonts({ options: "[name].[ext]" }),
     parts.loadJSX({ exclude: /node_modules/ }),
     parts.loadJS({ exclude: /node_modules/ }),
     parts.loadJSON()

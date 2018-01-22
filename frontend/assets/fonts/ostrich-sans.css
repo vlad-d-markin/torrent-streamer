@@ -1,0 +1,14 @@
+/* Ostrich Sans */
+
+@font-face {
+	font-family: 'Ostrich Sans';
+	src: url('ostrich-sans-black.woff') format('woff');
+	font-weight: 900;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'Ostrich Sans';
+	src: url('ostrich-sans-bold.woff') format('woff');
+	font-weight: 700;
+	font-style: normal;
+}

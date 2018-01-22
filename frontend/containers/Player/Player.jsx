@@ -37,13 +37,9 @@ export default class Player extends React.Component {
     render() {
         return (
             <div className="player-wrapper">
-                <div className="player-content">
+                    <TrackInfo />
                     <Timeline maxVal={100} cached={50} position={30} onPosition={null} />
-                    <div className="player-controls-wrapper">
-                        <Controls onPlay={this.play.bind(this)} isPlaying={this.state.isPlaying} />
-                        <TrackInfo />
-                    </div>
-                </div>
+                    <Controls onPlay={this.play.bind(this)} isPlaying={this.state.isPlaying} />
             </div>
         );
     }

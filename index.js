@@ -16,7 +16,7 @@ app.use('/', express.static(path.join(__dirname, 'dist')));
 
 var port = process.env.PORT || 8080;
 server.listen(port,  function() {
-    db.sync({force: true});
-    // db.sync();
+    // db.sync({force: true});
+    db.sync();
     console.log('Server is up at' ,port);
 });

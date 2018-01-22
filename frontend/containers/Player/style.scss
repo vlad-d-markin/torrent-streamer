@@ -1,17 +1,21 @@
-@import '~Assets/common.scss';
 @import '~Assets/theme.sass';
 
 $player-height: $footer-height; // TODO remove
 
 // Configurable theme vars
-$player-background: #121212 !default;
+$player-background: none !default;
 $player-color: #dddddd !default;
-$player-color-secondary: #7f7f7f !default;
+$player-color-secondary: #c7bfaa !default;
 $player-color-accent: #ce3623 !default;
+
+$player-timeline-color: #01528a;
+$player-timeline-cached-color: #0096d3;
+$player-timelone-progress-color: #c7bfaa;
 
 $player-font-size: 12pt !default;
 $player-font-size-secondary: 10pt !default;
 
+$player-info-width: 20%;
 $player-height: 50px !default;
 
 
@@ -31,91 +35,110 @@ $control-button-height: $player-size-A;
 
 
 .player-wrapper {
-    @extend .floating-bottom-fullwidth;
-    z-index: 9999 !important;
+    position: relative;
+    width: 100%;
+    height: $player-height;
 
-    .player-content {
-        @extend .container;
-        height: $player-height-whole;
-        min-width: $player-min-width;
-        color: $player-color;
-        background: $player-background;
+
+    .player-track-info {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: $player-info-width;
+        padding-top: 4px;
+
+        .player-track-info-title {
+            color: $player-color;
+            font-size: $player-font-size;
+        }
+        .player-track-info-subtitle {
+            color: $player-color-secondary;
+            font-size: $player-font-size-secondary;
+            font-weight: normal;
+        }
+        .player-track-info {
+            display: inline-block;
+            white-space: nowrap;
+            text-align: right;            
+        }
+    }
+
+
+    .player-timeline-wrapper {
+        position: absolute;
+        left: $player-info-width;
+        top: 0;
+        bottom: 0;
+        right: 132px;
 
         .player-timeline {
-            height: $max-timeline-height;
-            position: relative;
-
+            height: 3px;
+            position: absolute;
+            top: 45%;
+            left: 14px;
+            right: 14px;
+            border-radius: 2px;
+            background: $player-timeline-color;
+        
             div {
                 position: absolute;
-                height: 100%;
+                height: 100%;                
             }
 
+            .player-timeline-slider {
+                top: -4px;
+                width: 12px !important;
+                height: 12px !important;
+                background: white;
+                z-index: 100;
+                border-radius: 6px;
+            }
+        
             .player-timeline-cached {
-                background-color: $player-color-secondary;
+                background-color: $player-timeline-cached-color;
                 width: 50%;
             }
-
+        
             .player-timeline-position {
-                background-color: $player-color-accent;
+                background-color: $player-timelone-progress-color;
                 width: 30%;
             }
         }
+    }
 
-        .player-controls-wrapper {
-            height: $controls-height;
+    .player-control-buttons {
+        position: absolute;
+        width: 132px;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        padding-top: 8px;
+        
+        .player-control {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid;
+            border-color: transparent;
+            
+            border-radius: 20px;
+            color: $player-color-secondary;
+            vertical-align: middle;
+            text-align: center;
+            padding-top: 6px;
+        }
+        .player-control * {
+            display: inline-block;
+        }
 
-            .player-control-buttons {
-                float: left;
-                height: $controls-height;
-                vertical-align: top;
-
-                .player-control {
-                    display: inline-block;
-                    width: $control-button-width;
-                    height: $control-button-height;
-                    color: $player-color-secondary;
-                    font-size: 14pt;
-                    margin-right: 4px;
-                    text-align: center;
-                    padding-top: 16px; // TODO vertical alignment
-                }
-                .player-control:hover {
-                    color: $player-color;
-                }
-            }
-
-
-
-            .player-track-info-box {
-                float: right;
-                height: $controls-height;
-
-                .player-track-info {
-                    display: inline-block;
-                    white-space: nowrap;
-
-                    text-align: right;
-
-                    .player-track-info-title {
-                        color: $player-color;
-                        font-size: $player-font-size;
-                        font-weight: bolder;
-
-                    }
-                    .player-track-info-subtitle {
-                        color: $player-color-secondary;
-                        font-size: $player-font-size-secondary;
-                        font-weight: normal;
-                    }
-                }
-
-                .player-track-info-art {
-                    display: inline-block;
-                    margin-left: 4px;
-                    width: $control-button-width;
-                    height: $control-button-height;
-                }
-            }
+        .player-control:hover {
+            color: $player-color;
+            border: 1px solid $player-timeline-color;
+            border-color: $player-color;
+            // background: 
         }
     }
 }
+
+

@@ -1,3 +1,51 @@
+@import '~Assets/fonts/ostrich-sans.css';
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+#mountroot {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    background-image: linear-gradient(to right top, #010135, #00275c, #004984, #006fac, #0096d3);
+}
+
+
+.header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $header-height;
+    padding-top: 12px;
+}
+
+.content {
+    position: absolute;
+    top: $header-height;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.logo {
+    display: inline-block;
+    font-family: 'Ostrich Sans';
+    font-size: 32pt;
+}
+.logo .left {
+    font-weight: 900;
+}
+.logo .right {
+    font-weight: 700;
+    // font-size: 28pt;
+}
+
 
 .floating-container {
     position: fixed;
@@ -19,3 +67,5 @@
     @extend .floating-fullwidth;
     bottom: 0;
 }
+
+

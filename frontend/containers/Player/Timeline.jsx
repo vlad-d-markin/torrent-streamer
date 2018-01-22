@@ -4,9 +4,12 @@ import React from 'react';
 export default class Timeline extends React.Component {
     render() {
         return (
-            <div className="player-timeline">
-                <div className="player-timeline-cached"></div>
-                <div className="player-timeline-position"></div>
+            <div className="player-timeline-wrapper">
+                <div className="player-timeline">
+                    <div className="player-timeline-slider"></div>
+                    <div className="player-timeline-cached"></div>
+                    <div className="player-timeline-position"></div>
+                </div>
             </div>
         );
     }
