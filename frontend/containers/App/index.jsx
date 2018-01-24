@@ -35,7 +35,7 @@ class App extends React.Component {
                 </div>
                 <div className="content">
                     <div className="container">
-                    content
+                    contents
                     </div>
                 </div>
             </div>

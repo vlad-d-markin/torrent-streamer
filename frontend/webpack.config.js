@@ -13,7 +13,8 @@ const PATHS = {
 var commonConfig = {
     entry: {
         app: PATHS.app,
-        vendor: ["react"]
+        vendor: ["react"],
+        hot: 'webpack-hot-middleware/client'
     },
     output: {
         path: PATHS.build,
@@ -43,7 +44,9 @@ var commonConfig = {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: "vendor",
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin()
     ]
 };
 
@@ -53,7 +56,7 @@ var config = merge([
     parts.loadLESS(),
     parts.loadSCSS(),
     parts.loadFonts({ options: "[name].[ext]" }),
-    parts.loadJSX({ exclude: /node_modules/ }),
+    parts.loadJSX({ exclude: /node_modules/, hmr: true }),
     parts.loadJS({ exclude: /node_modules/ }),
     parts.loadJSON()
 ]);

@@ -10,6 +10,4 @@ import App from 'Containers/App'
 const store = createStore(reducer, applyMiddleware(thunk, createLogger()));
 
 const mountroot = document.getElementById('mountroot');
-ReactDOM.render(<Provider store={store}>
-                    <App />
-                </Provider>, mountroot);
+ReactDOM.render(<Provider store={store}><App /></Provider>, mountroot);
