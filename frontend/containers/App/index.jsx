@@ -7,6 +7,7 @@ import TrackPool from 'Containers/TrackPool'
 import LoginForm from 'Containers/LoginForm'
 import Player from 'Containers/Player'
 import Controls from 'Containers/Controls'
+import TrackList from 'Components/TrackList'
 
 import { login } from 'Actions'
 
@@ -35,7 +36,7 @@ class App extends React.Component {
                 </div>
                 <div className="content">
                     <div className="container">
-                    contents
+                        <TrackList />
                     </div>
                 </div>
             </div>
