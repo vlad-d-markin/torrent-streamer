@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { connectStreamer } from 'Actions'
+import $ from 'jquery'
 import 'Assets/theme.sass'
 
 import TrackPool from 'Containers/TrackPool'
@@ -14,27 +15,52 @@ import { login } from 'Actions'
 
 class App extends React.Component {
     constructor() {
-        super();
+        super()
+        this.handleResize = this.handleResize.bind(this)
+    }
+
+    adaptMargin() {
+        const headerHeight = this.$header.outerHeight();
+        this.$content.css('top', headerHeight + 'px');
+        console.log('Adapted padding to ', headerHeight);
+    }
+
+    handleResize() {
+        this.adaptMargin();
     }
 
     componentDidMount() {
-        this.props.login('test');
+        this.$header = $('#header');
+        this.$content = $('#content');
+        $(window).resize(this.handleResize);
+        this.adaptMargin();
     }
 
     render() {
         var page = (true || this.props.user.id) ? <TrackPool /> : <LoginForm />;
+        const controls = <Controls />;
         return (
             <div className="app-wrapper">
-                <div className="header">
+                <div id="header" className="header">
                     <div className="container">
-                        <div className="columns">
-                            <div className="column is-2 logo"><span className="left">Sound</span><span className="right">River</span></div>
-                            <div className="column player"><Player /></div>
-                            <div className="column is-2 controls"><Controls /></div>
+                        <div className="columns is-gapless is-multiline">
+                            <div className="column is-narrow-tablet">
+                                <span className="logo">
+                                    <span className="left">Sound</span><span className="right">River</span>
+                                </span>
+                                <span className="is-hidden-tablet controls">{controls}</span>
+                            </div>
+                            <div className="column player-container">
+                                <div className="stub is-hidden-mobile"></div>
+                                <Player />
+                            </div>
+                            <div className="column is-narrow-tablet is-hidden-mobile">
+                                <div className="controls">{controls}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="content">
+                <div id="content">
                     <div className="container">
                         <TrackList />
                     </div>

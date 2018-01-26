@@ -7,6 +7,7 @@ class TrackList extends React.Component {
         let tracks = [];
         for (let i = 1; i < 32; i++) {
             tracks.push({
+                id: i,
                 title: `Track title ${i}`,
                 album: `Album ${i}`,
                 artist: `Artist ${i}`,
@@ -17,7 +18,7 @@ class TrackList extends React.Component {
         let number = 1;
         let trackListItems = _.map(tracks, track => {
             return (
-                <li>
+                <li key={track.id}>
                     <span className="track-number">
                         <span className="track-number-nohover">{number++}</span>
                         <span className="track-number-hover">

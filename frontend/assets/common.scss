@@ -3,30 +3,37 @@
 html, body {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-}
+    background-image: linear-gradient(to right top, #010135, #00275c, #004984, #006fac, #0096d3);
 
+}
 
 #mountroot {
     width: 100%;
     height: 100%;
-    overflow: hidden;
     position: relative;
-    background-image: linear-gradient(to right top, #010135, #00275c, #004984, #006fac, #0096d3);
+    overflow: hidden;
+}
+
+.app-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 
-.header {
+#header {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: $header-height;
-    padding-top: 12px;
+    padding: 6px;
+    box-shadow: 0 1px 4px black;
 }
 
-.content {
+#content {
     position: absolute;
+
     top: $header-height;
     left: 0;
     right: 0;
@@ -38,6 +45,7 @@ html, body {
     display: inline-block;
     font-family: 'Ostrich Sans';
     font-size: 32pt;
+    text-align: center;
 }
 .logo .left {
     font-weight: 900;
@@ -47,26 +55,11 @@ html, body {
     // font-size: 28pt;
 }
 
-
-.floating-container {
-    position: fixed;
+.controls {
+    float: right;
 }
 
-.floating-fullwidth {
-    @extend .floating-container;
-    left: 0;
-    right: 0;
-    height: auto;
+.stub {
+    height: 6px;
 }
-
-.floating-top-fullwidth {
-    @extend .floating-fullwidth;
-    top: 0;
-}
-
-.floating-bottom-fullwidth {
-    @extend .floating-fullwidth;
-    bottom: 0;
-}
-
 

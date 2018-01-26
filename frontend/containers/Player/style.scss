@@ -35,18 +35,12 @@ $control-button-height: $player-size-A;
 
 
 .player-wrapper {
-    position: relative;
-    width: 100%;
-    height: $player-height;
-
+    padding: 0 4px;
 
     .player-track-info {
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: $player-info-width;
-        padding-top: 4px;
+        // text-overflow: ellipsis;
+        display: inline-block;
+        text-align: left;
 
         .player-track-info-title {
             color: $player-color;
@@ -60,30 +54,28 @@ $control-button-height: $player-size-A;
         .player-track-info {
             display: inline-block;
             white-space: nowrap;
-            text-align: right;            
+            text-align: right;
         }
     }
 
 
     .player-timeline-wrapper {
-        position: absolute;
-        left: $player-info-width;
-        top: 0;
-        bottom: 0;
-        right: 132px;
+        position: relative;
+        height: 100%;
+        min-height: 22px;
 
         .player-timeline {
             height: 3px;
             position: absolute;
-            top: 45%;
+            top:44%;
             left: 14px;
             right: 14px;
             border-radius: 2px;
             background: $player-timeline-color;
-        
+
             div {
                 position: absolute;
-                height: 100%;                
+                height: 100%;
             }
 
             .player-timeline-slider {
@@ -94,12 +86,12 @@ $control-button-height: $player-size-A;
                 z-index: 100;
                 border-radius: 6px;
             }
-        
+
             .player-timeline-cached {
                 background-color: $player-timeline-cached-color;
                 width: 50%;
             }
-        
+
             .player-timeline-position {
                 background-color: $player-timelone-progress-color;
                 width: 30%;
@@ -107,21 +99,22 @@ $control-button-height: $player-size-A;
         }
     }
 
+    // .player-controls {
+    //     padding-top: 0;
+    // }
+    .player-controls-mobile {
+        // @extend .player-controls;
+        float: right;
+    }
+
     .player-control-buttons {
-        position: absolute;
-        width: 132px;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        padding-top: 8px;
-        
+        margin-top: 3px;
         .player-control {
             display: inline-block;
             width: 40px;
             height: 40px;
             border: 1px solid;
             border-color: transparent;
-            
             border-radius: 20px;
             color: $player-color-secondary;
             vertical-align: middle;
@@ -131,14 +124,14 @@ $control-button-height: $player-size-A;
         .player-control * {
             display: inline-block;
         }
-
         .player-control:hover {
             color: $player-color;
             border: 1px solid $player-timeline-color;
             border-color: $player-color;
-            // background: 
         }
     }
+
+
 }
 
 

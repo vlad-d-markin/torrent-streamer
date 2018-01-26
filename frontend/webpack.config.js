@@ -13,7 +13,7 @@ const PATHS = {
 var commonConfig = {
     entry: {
         app: PATHS.app,
-        vendor: ["react"],
+        vendor: ["react", "jquery"],
         hot: 'webpack-hot-middleware/client'
     },
     output: {

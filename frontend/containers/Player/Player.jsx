@@ -35,11 +35,20 @@ export default class Player extends React.Component {
     }
 
     render() {
+        let controls = <Controls />;
+
         return (
-            <div className="player-wrapper">
+            <div className="player-wrapper columns is-gapless">
+                <div className="column is-narrow">
                     <TrackInfo />
-                    <Timeline maxVal={100} cached={50} position={30} onPosition={null} />
-                    <Controls onPlay={this.play.bind(this)} isPlaying={this.state.isPlaying} />
+                    <div className="is-hidden-tablet player-controls-mobile">{controls}</div>
+                </div>
+                <div className="column">
+                    <Timeline />
+                </div>
+                <div className="column is-hidden-mobile is-narrow player-controls">
+                    {controls}
+                </div>
             </div>
         );
     }
