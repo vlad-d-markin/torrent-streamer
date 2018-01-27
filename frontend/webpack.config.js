@@ -13,12 +13,13 @@ const PATHS = {
 var commonConfig = {
     entry: {
         app: PATHS.app,
-        vendor: ["react", "jquery"],
+        // vendor: ["react", "jquery", "redux", "react-redux"],
         hot: 'webpack-hot-middleware/client'
     },
     output: {
         path: PATHS.build,
-        filename: '[name].js'
+        filename: '[name]-bundle.js',
+        chunkFilename: '[name]-chunk.js',
     },
     devtool: 'source-map',
     target: 'web',
@@ -32,18 +33,20 @@ var commonConfig = {
             Containers: path.join(__dirname, 'containers'),
             Actions: path.join(__dirname, 'actions'),
             Reducers: path.join(__dirname, 'reducers'),
-            Assets: path.join(__dirname, 'assets')
+            Assets: path.join(__dirname, 'assets'),
+            Const: path.join(__dirname, 'const.js')
         }
     },
 
 
     plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            name: "vendor",
+            minChunks: ({ resource }) => /node_modules/.test(resource),
+        }),
         new HtmlWebpackPlugin({
             title: 'Torrent streamer',
             template: PATHS.indexTemplate
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NamedModulesPlugin()

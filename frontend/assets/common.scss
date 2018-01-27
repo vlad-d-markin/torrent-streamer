@@ -21,25 +21,17 @@ html, body {
     overflow: hidden;
 }
 
-
-#header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 6px;
-    box-shadow: 0 1px 4px black;
+.transition-bg-02s {
+    transition: background 0.2s;
 }
 
-#content {
-    position: absolute;
-
-    top: $header-height;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow-y: scroll;
+.button-bg {
+    background: rgba(0, 151, 211, 0.425);
 }
+.button-bg:hover {
+    background: rgba(0, 151, 211, 0.712);
+}
+
 
 .logo {
     display: inline-block;

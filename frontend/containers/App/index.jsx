@@ -1,72 +1,61 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { connectStreamer } from 'Actions'
-import $ from 'jquery'
+
 import 'Assets/theme.sass'
 
-import TrackPool from 'Containers/TrackPool'
+import HeaderContainer from 'Containers/HeaderContainer'
+import Page from 'Components/Page'
+import TabGroup from 'Components/TabGroup'
+import Tab from 'Components/Tab'
+
 import LoginForm from 'Containers/LoginForm'
-import Player from 'Containers/Player'
-import Controls from 'Containers/Controls'
 import TrackList from 'Components/TrackList'
 
 import { login } from 'Actions'
+import Const from 'Const';
 
 
 class App extends React.Component {
     constructor() {
-        super()
-        this.handleResize = this.handleResize.bind(this)
+        super();
+        this.state = {
+            tab: 'tracks'
+        }
+        this.switchTab = this.switchTab.bind(this)
     }
 
-    adaptMargin() {
-        const headerHeight = this.$header.outerHeight();
-        this.$content.css('top', headerHeight + 'px');
-        console.log('Adapted padding to ', headerHeight);
-    }
-
-    handleResize() {
-        this.adaptMargin();
-    }
-
-    componentDidMount() {
-        this.$header = $('#header');
-        this.$content = $('#content');
-        $(window).resize(this.handleResize);
-        this.adaptMargin();
+    switchTab(tabId) {
+        this.setState({
+            tab: tabId
+        })
     }
 
     render() {
-        var page = (true || this.props.user.id) ? <TrackPool /> : <LoginForm />;
-        const controls = <Controls />;
+        const { user } = this.props;
+        const isLoggedIn = user.state === Const.user.state.LOGGED_IN;
+        const { tab } = this.state;
+
+        const header = <HeaderContainer />
+
         return (
             <div className="app-wrapper">
-                <div id="header" className="header">
-                    <div className="container">
-                        <div className="columns is-gapless is-multiline">
-                            <div className="column is-narrow-tablet">
-                                <span className="logo">
-                                    <span className="left">Sound</span><span className="right">River</span>
-                                </span>
-                                <span className="is-hidden-tablet controls">{controls}</span>
-                            </div>
-                            <div className="column player-container">
-                                <div className="stub is-hidden-mobile"></div>
-                                <Player />
-                            </div>
-                            <div className="column is-narrow-tablet is-hidden-mobile">
-                                <div className="controls">{controls}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div id="content">
-                    <div className="container">
-                        <TrackList />
-                    </div>
-                </div>
+                <Page header={header}>
+                { isLoggedIn ? (
+                        <TabGroup tab={tab} onTabSwicth={this.switchTab}>
+                            <Tab id="tracks" title="Tracks">
+                                <TrackList />
+                            </Tab>
+                            <Tab id="edit" title="Edit">
+                                track editor
+                            </Tab>
+                        </TabGroup>
+                    ) : (
+                        <LoginForm />
+                )}
+                </Page>
             </div>
-        );
+        )
     }
 }
 

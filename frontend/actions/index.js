@@ -7,9 +7,10 @@ export const LOGIN_REQUEST = "LOGIN_REQUEST"
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS"
 export const LOGIN_FAILURE = "LOGIN_FAILURE"
 
-export const loginSuccess = userId => ({
+export const loginSuccess = (userId, userName) => ({
     type: LOGIN_SUCCESS,
-    userId
+    userId,
+    userName
 })
 
 export const loginFailure = error => ({
@@ -31,7 +32,6 @@ export const login = username => {
         .send({ username })
         .then(res => {
             if (res.body.success) {
-                console.log('Login res', res.body);
                 const userId = res.body.user.id;
                 socket = io();
                 socket.once('connect', () => {
@@ -43,7 +43,8 @@ export const login = username => {
                             dispatch(loginFailure(error))
                         }
                         else {
-                            dispatch(loginSuccess(userId))
+                            localStorage.setItem('userId', userId)
+                            dispatch(loginSuccess(userId, username))
                         }
                     });
                 });
@@ -58,6 +59,19 @@ export const login = username => {
                 dispatch(loginFailure(res.body.error))
             }
         })
+    }
+}
+
+export const LOGOUT = "LOGOUT"
+export const logout = () => {
+    return dispatch => {
+        if (socket) {
+            console.log('Connection closed on logout')
+            socket.close();
+            socket = null;
+        }
+        localStorage.setItem('userId', null)
+        dispatch({ type: LOGOUT })
     }
 }
 

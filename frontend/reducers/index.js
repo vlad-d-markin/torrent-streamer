@@ -1,93 +1,68 @@
 import _ from 'lodash'
 import uuid from 'uuid/v4'
+import Const from 'Const'
 
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from 'Actions';
-import { TRACK_SET_SOURCE } from 'Actions';
 
 const initialState = {
     user: {
         state: 'none',
-        id: null
+        id: null,
+        name: 'null'
     },
-    connection: {
-        state: 'disconnected',
-        clientId: null,
-        io: null
-    },
+    player: {},
     notifications: [],
     tracks: {
-        'track_id_1' : {
-            id: 'track_id_1',
-            title: 'Track 1',
-            artist: 'Artist 1',
-            album: 'Album 1',
-            sourceId: 'source_id_1'
-        },
-        'track_id_2' : {
-            id: 'track_id_2',                    
-            title: 'Track 2',
-            artist: 'Artist 2',
-            album: 'Album 2',
-            sourceId: 'source_id_2'
-        },
-        'track_id_3' : {
-            id: 'track_id_3',                    
-            title: 'Track 3',
-            artist: 'Artist 3',
-            album: 'Album 3',
-            sourceId: null
-        }
+        byId: {},
+        allIds: []
     },
     sources: {
-        'source_id_1': {
-            id: 'source_id_1',
-            name: 'Source 1',
-            infoHash: 'info_hash_1',
-            index: 0
-        },
-        'source_id_2': {
-            id: 'source_id_2',
-            name: 'Source 2',
-            infoHash: 'info_hash_2',
-            index: 2
-        },
-        'source_id_3': {
-            id: 'source_id_3',
-            name: 'Source 3',
-            infoHash: 'info_hash_3',
-            index: 6
-        }
+        byId: {},
+        allIds: []
     }
 }
 
+// User
 
+import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from 'Actions';
 
 const user = (user, action) => {
     switch(action.type) {
-    case LOGIN_REQUEST:
-        return {
-            ...user,
-            state: 'in_propgress'
-        }
-        break;
-    case LOGIN_SUCCESS:
-        return {
-            ...user,
-            state: 'logged_in',
-            id: action.userId
-        }
-        break
-    case LOGIN_FAILURE:
-        return {
-            ...user,
-            state: 'failure'
-        }
-        break;
+        case LOGIN_REQUEST:
+            return {
+                ...user,
+                state: Const.user.state.LOGIN_IN_PROGRESS
+            }
+            break;
+        case LOGIN_SUCCESS:
+            return {
+                ...user,
+                state: Const.user.state.LOGGED_IN,
+                id: action.userId,
+                name: action.userName
+            }
+            break
+        case LOGIN_FAILURE:
+            return {
+                ...user,
+                state: Const.user.state.LOGIN_ERROR
+            }
+            break;
+        case LOGOUT:
+            return {
+                ...user,
+                state: Const.user.state.LOGGED_OUT
+            }
+            break;
     default:
         return user;
     }
 }
 
+
+
+// Tracks
+
+import { TRACK_SET_SOURCE } from 'Actions';
 
 const tracks = (tracks, action) => {
     switch(action.type) {

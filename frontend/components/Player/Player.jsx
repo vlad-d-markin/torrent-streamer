@@ -1,6 +1,5 @@
 import './style.scss';
 import React from 'react';
-import createPlayer from 'web-audio-player';
 import io from 'socket.io-client';
 import Timeline from './Timeline.jsx';
 import Controls from './Controls.jsx';

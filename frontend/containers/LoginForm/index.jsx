@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import 'Assets/theme.sass'
+import './style.scss'
 import cn from 'class-name'
 
 import { login } from 'Actions'
@@ -24,19 +24,21 @@ class LoginForm extends React.Component {
 
     render() {
         return (
-            <div className="login-form">
-                <div className="field">
-                    <label className="label">Username</label>
-                    <div className="control has-icons-left has-icons-right">
-                        <input className="input" type="text" placeholder="booper_dooper" onChange={this.handleChange.bind(this)} value={this.state.login}/>
-                        <span className="icon is-small is-left">
-                            <i className="fa fa-user"></i>
-                        </span>
+            <div className="columns login-box">
+                <div className="column is-half is-offset-one-quarter">
+                    <div className="field">
+                        <label className="label">Username</label>
+                        <div className="control has-icons-left has-icons-right">
+                            <input className="input" type="text" placeholder="booper_dooper" onChange={this.handleChange.bind(this)} value={this.state.login}/>
+                            <span className="icon is-small is-left">
+                                <i className="fa fa-user"></i>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div className="field is-grouped">
-                    <div className="control">
-                        <button className={cn(["button", { "is-loading": this.props.user.state == 'in_propgress' }])} onClick={this.handleSubmit.bind(this)}>Submit</button>
+                    <div className="field is-grouped is-grouped-right">
+                        <div className="control">
+                            <button className={cn(["button", "button-bg","transition-bg-02s", { "is-loading": this.props.user.state == 'in_propgress' }])} onClick={this.handleSubmit.bind(this)}>Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
