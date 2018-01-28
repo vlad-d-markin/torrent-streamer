@@ -24,7 +24,10 @@ app.use(require("webpack-hot-middleware")(compiler, {
 
 var port = process.env.PORT || 8080;
 server.listen(port,  function() {
-    // db.sync({force: true});
-    db.sync();
+    // db.sync({force: true}).then(function() {
+    // // db.sync().then(function() {
+    //     require('./backend/testData')(function() { });
+    // });
+
     console.log('Server is up at' ,port);
 });

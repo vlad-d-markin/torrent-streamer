@@ -15,6 +15,6 @@ const User = db.define('user', {
     }
 });
 
-User.hasMany(Track, { as: 'Tracks' });
+User.Tracks = User.belongsToMany(Track, { through: 'user_track' });
 
 module.exports = User;

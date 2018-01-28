@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
-const Torrent = require('./Torrent');
+const Source = require('./Source');
+const User = require('./User');
 
 const Track = db.define('track', {
     id: {
@@ -11,11 +12,15 @@ const Track = db.define('track', {
     title: {
         type: Sequelize.STRING
     },
-    index: {
-        type: Sequelize.INTEGER
+    album: {
+        type: Sequelize.STRING
+    },
+    artist: {
+        type: Sequelize.STRING
     }
 });
 
-Track.belongsTo(Torrent, { as: 'Torrent' });
+Track.belongsTo(Source, { as: 'Source', foreignKey: 'sourceId' });
+// Track.belongsToMany(User, { througn: 'track_user' });
 
 module.exports = Track;

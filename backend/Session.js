@@ -1,5 +1,4 @@
 const Track = require('./models/Track');
-const Torrent = require('./models/Torrent');
 const Source = require('./models/Source');
 const _ = require('lodash');
 const async = require('async');
@@ -11,18 +10,55 @@ var Session = function(socket, user) {
 
     console.log('Created Session for', user.get('username'));
 
-    socket.on('gettracks', this.onGetTracks.bind(this));
+    socket.on('gettracks', this.getTracks.bind(this));
+    socket.on('getsources', this.getSources.bind(this));
+
+
     socket.on('addtracks', this.onAddTracks.bind(this));
     socket.on('addsources', this.onAddSources.bind(this));
+
+
 };
 
-Session.prototype.onGetTracks = function(params, cb) {
-    Tracks.findAll()
-    .then(tracks => {
-
-    });
-    cb({ error: 'NOT_IMPLEMENTED' });
+// 6f0c81ca65f338557c4a92ec0d9781713ca484cd
+//
+Session.prototype.getTracks = function(params, cb) {
+    this._user.getTracks()
+        .then(function(tracks) {
+            var tracksJson = _.map(tracks, function(t) {
+                return t.toJSON();
+            })
+            cb(false, tracksJson);
+        })
+        .catch(function(error) {
+            cb({
+                error: '',
+                message: error.message
+            }, null)
+        });
 };
+
+Session.prototype.getSources = function(params, cb) {
+    this._user.getTracks()
+        .then(function (tracks) {
+            var sourcePromises = _.map(tracks, function (t) {
+                return t.getSource();
+            })
+            return Promise.all(sourcePromises);
+        })
+        .then(function(sources) {
+            var sourcesJson = _.map(sources, function (s) {
+                return s.toJSON();
+            })
+            cb(false, sourcesJson);
+        })
+        .catch(function (error) {
+            cb({
+                error: '',
+                message: error.message
+            }, null)
+        });
+}
 
 Session.prototype.onAddTracks = function(params, cb) {
     var addedTracks = {};

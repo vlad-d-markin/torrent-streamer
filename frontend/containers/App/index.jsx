@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { connectStreamer } from 'Actions'
+import { initApplication } from 'Actions'
 
 import 'Assets/theme.sass'
 
@@ -10,7 +10,7 @@ import TabGroup from 'Components/TabGroup'
 import Tab from 'Components/Tab'
 
 import LoginForm from 'Containers/LoginForm'
-import TrackList from 'Components/TrackList'
+import TrackListContainer from 'Containers/TrackListContainer'
 
 import { login } from 'Actions'
 import Const from 'Const';
@@ -23,6 +23,10 @@ class App extends React.Component {
             tab: 'tracks'
         }
         this.switchTab = this.switchTab.bind(this)
+    }
+
+    componentDidMount() {
+        this.props.initApplication();
     }
 
     switchTab(tabId) {
@@ -44,7 +48,7 @@ class App extends React.Component {
                 { isLoggedIn ? (
                         <TabGroup tab={tab} onTabSwicth={this.switchTab}>
                             <Tab id="tracks" title="Tracks">
-                                <TrackList />
+                                <TrackListContainer />
                             </Tab>
                             <Tab id="edit" title="Edit">
                                 track editor
@@ -67,7 +71,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        login: username => { dispatch(login(username)) }
+        initApplication: username => { dispatch(initApplication()) }
     }
 }
 

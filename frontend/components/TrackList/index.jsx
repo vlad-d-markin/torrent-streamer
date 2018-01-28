@@ -4,23 +4,11 @@ import './style.scss'
 
 class TrackList extends React.Component {
     render() {
-        let tracks = [];
-        for (let i = 1; i < 32; i++) {
-            tracks.push({
-                id: i,
-                title: `Track title ${i}`,
-                album: `Album ${i}`,
-                artist: `Artist ${i}`,
-                length: `${(i+1) % 10}:${(i+5) % 10}${(i+2) % 10}`
-            })
-        }
-
-        let number = 1;
-        let trackListItems = _.map(tracks, track => {
+        let trackListItems = _.map(this.props.tracks, track => {
             return (
                 <li key={track.id}>
                     <span className="track-number">
-                        <span className="track-number-nohover">{number++}</span>
+                        <span className="track-number-nohover">{track.number}</span>
                         <span className="track-number-hover">
                             <button><i className="fa fa-play" aria-hidden="true"></i></button>
                         </span>
@@ -29,7 +17,7 @@ class TrackList extends React.Component {
                         <span className="track-title">{track.title}</span>
                         <span className="track-sub">{track.artist} - {track.album}</span>
                     </span>
-                    <span className="track-length">{track.length}</span>
+                    <span className="track-length">{track.length || '00:00'}</span>
                 </li>
             );
         })

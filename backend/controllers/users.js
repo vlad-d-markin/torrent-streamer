@@ -21,7 +21,7 @@ module.exports.handleUserConnenct = function(socket) {
         User.findById(params.userId)
         .then(user => {
             activeUsers[socket.id] = new Session(socket, user);
-            cb(false);
+            cb(false, user);
             socket.once('disconnect', () => {
                 activeUsers[socket.id];
                 delete activeUsers[socket.id];

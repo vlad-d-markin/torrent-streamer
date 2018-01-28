@@ -13,13 +13,19 @@ const initialState = {
     notifications: [],
     tracks: {
         byId: {},
-        allIds: []
+        allIds: [],
+        fetching: false
     },
     sources: {
         byId: {},
-        allIds: []
+        allIds: [],
+        fetching: false
     }
 }
+
+// App
+
+
 
 // User
 
@@ -58,37 +64,74 @@ const user = (user, action) => {
     }
 }
 
-
-
 // Tracks
 
-import { TRACK_SET_SOURCE } from 'Actions';
+import { FETCH_TRACKS_REQUEST, FETCH_TRACKS_SUCCESS, FETCH_TRACKS_FAILURE } from 'Actions';
 
-const tracks = (tracks, action) => {
-    switch(action.type) {
-    case TRACK_SET_SOURCE:
-    {
-        var state = {...tracks};
-        state[action.trackId].sourceId = action.sourceId;
-        return state;
-    }
-    default:
-        return tracks;
+const tracks = (state, action) => {
+    switch (action.type) {
+        case FETCH_TRACKS_REQUEST:
+            return {
+                ...state,
+                fetching: true
+            }
+        case FETCH_TRACKS_SUCCESS:
+        {
+            const tracksById = {};
+            _.each(action.tracks, track => {
+                tracksById[track.id] = track;
+            })
+            return {
+                ...state,
+                byId: tracksById,
+                allIds: _.keys(tracksById),
+                fetching: false
+            }
+        }
+        case FETCH_TRACKS_FAILURE:
+            return {
+                ...state,
+                fetching: false
+            }
+        default:
+            return state;
     }
 }
 
+// Sources
 
-import { ADD_SOURCES } from 'Actions';
+import { FETCH_SOURCES_REQUEST, FETCH_SOURCES_SUCCESS, FETCH_SOURCES_FAILURE } from 'Actions';
 
 const sources = (state, action) => {
-    switch(action.type) {
-    case ADD_SOURCES:
-        return {...state, ...action.sources };
-        break;
-    default:
-        return state;
+    switch (action.type) {
+        case FETCH_SOURCES_REQUEST:
+            return {
+                ...state,
+                fetching: true
+            }
+        case FETCH_SOURCES_SUCCESS:
+            {
+                const sourcesById = {};
+                _.each(action.sources, source => {
+                    sourcesById[source.id] = source;
+                })
+                return {
+                    ...state,
+                    byId: sourcesById,
+                    allIds: _.keys(sourcesById),
+                    fetching: false
+                }
+            }
+        case FETCH_SOURCES_FAILURE:
+            return {
+                ...state,
+                fetching: false
+            }
+        default:
+            return state;
     }
 }
+
 
 export default (state = initialState, action) => {
     return {

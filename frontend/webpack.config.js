@@ -21,7 +21,7 @@ var commonConfig = {
         filename: '[name]-bundle.js',
         chunkFilename: '[name]-chunk.js',
     },
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
     target: 'web',
     node: {
         fs: 'empty'
