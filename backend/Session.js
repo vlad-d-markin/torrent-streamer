@@ -17,6 +17,7 @@ var Session = function(user) {
     this._user = user;
     this._client = new WebTorrent();
     this._directory = path.resolve(UID_DIR, user.get('id'));
+    this.active = 0;
 };
 
 // Create attach routines
@@ -29,22 +30,25 @@ Session.prototype.create = function(cb) {
 };
 
 Session.prototype.destroy = function(cb) {
+    var me = this;
     if (fs.existsSync(this._directory)) {
         rimraf(this._directory, function() {
-            console.log('Destroyed Session for', this._user.get('username'));
+            console.log('Destroyed Session for', me._user.get('username'));
             cb(false);
         });
-    }    
+    }
 };
 
 Session.prototype.attach = function(socket) {
     socket.on('gettracks', this.getTracks.bind(this));
     socket.on('getsources', this.getSources.bind(this));
+    this.active++;
 };
 
 Session.prototype.detach = function(socket) {
-    socket.removeAllListeners('gettracks');    
+    socket.removeAllListeners('gettracks');
     socket.removeAllListeners('getsources');
+    this.active--;
 };
 
 // Torrent routines
@@ -79,7 +83,7 @@ Session.prototype.addTorrentIfNotExists = function(infoHash) {
     return new Promise(function(resolve, reject) {
         me.getCachedTorrentIfExists(infoHash).then(function(torrentFileOrCache) {
             console.log('Trying to add torrent', infoHash);
-            me._client.add( 
+            me._client.add(
                 torrentFileOrCache,
                 { path: path.resolve(me._directory, infoHash)  },
                 function(torrent) {

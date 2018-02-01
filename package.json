@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "nodemonConfig": {
-    "verbose": true,
+    "verbose": false,
     "ignore": [
       "frontend",
       "dist"

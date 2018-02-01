@@ -1,4 +1,5 @@
 var path = require('path');
+const fs = require('fs');
 var express = require('express');
 var app = express();
 var server = require('http').createServer(app);
@@ -7,6 +8,19 @@ var bodyBarser = require('body-parser');
 var db = require('./backend/db');
 const webpackConfig = require('./frontend/webpack.config.js');
 const compiler = require('webpack')(webpackConfig);
+const config = require('./backend/config');
+
+// Init dirs
+function mkdirIfNotExists(dir) {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+}
+function createDirs() {
+    mkdirIfNotExists(config.APP_DIR);
+    mkdirIfNotExists(config.UID_DIR);
+    mkdirIfNotExists(config.TORRENT_CACHE_DIR);
+}
+
+createDirs();
 
 app.use(bodyBarser.json());
 
