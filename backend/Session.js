@@ -31,6 +31,7 @@ Session.prototype.create = function(cb) {
 
 Session.prototype.destroy = function(cb) {
     var me = this;
+    me._client.destroy();
     if (fs.existsSync(this._directory)) {
         rimraf(this._directory, function() {
             console.log('Destroyed Session for', me._user.get('username'));
