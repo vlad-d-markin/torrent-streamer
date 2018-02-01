@@ -2,26 +2,99 @@ const Track = require('./models/Track');
 const Source = require('./models/Source');
 const _ = require('lodash');
 const async = require('async');
+const WebTorrent = require('webtorrent');
+const path = require('path');
+const fs = require('fs');
+const rimraf = require('rimraf');
 const Promise = require('bluebird');
 
-var Session = function(socket, user) {
-    this._socket = socket;
+const APP_DIR = path.resolve(__dirname, '..', 'app');
+const UID_DIR = path.resolve(APP_DIR, 'uid');
+const TORRENT_CACHE_DIR = path.resolve(APP_DIR, 'torrent');
+
+
+var Session = function(user) {
     this._user = user;
-
-    console.log('Created Session for', user.get('username'));
-
-    socket.on('gettracks', this.getTracks.bind(this));
-    socket.on('getsources', this.getSources.bind(this));
-
-
-    socket.on('addtracks', this.onAddTracks.bind(this));
-    socket.on('addsources', this.onAddSources.bind(this));
-
-
+    this._client = new WebTorrent();
+    this._directory = path.resolve(UID_DIR, user.get('id'));
 };
 
-// 6f0c81ca65f338557c4a92ec0d9781713ca484cd
-//
+// Create attach routines
+Session.prototype.create = function(cb) {
+    if (!fs.existsSync(this._directory)) {
+        fs.mkdirSync(this._directory);
+    }
+    console.log('Created Session for', this._user.get('username'));
+    cb(false);
+};
+
+Session.prototype.destroy = function(cb) {
+    if (fs.existsSync(this._directory)) {
+        rimraf(this._directory, function() {
+            console.log('Destroyed Session for', this._user.get('username'));
+            cb(false);
+        });
+    }    
+};
+
+Session.prototype.attach = function(socket) {
+    socket.on('gettracks', this.getTracks.bind(this));
+    socket.on('getsources', this.getSources.bind(this));
+};
+
+Session.prototype.detach = function(socket) {
+    socket.removeAllListeners('gettracks');    
+    socket.removeAllListeners('getsources');
+};
+
+// Torrent routines
+
+Session.prototype.getStreamFactory = function(infoHash, index) {
+    var me = this;
+    return me.addTorrentIfNotExists(infoHash)
+        .then(function(torrent) {
+            const file = torrent.files[index];
+            return Promise.resolve({
+                torrent, file,
+                createStream: function(opts) {
+                    return file.createReadStream(opts);
+                }
+            });
+        })
+};
+
+Session.prototype.cacheTorrent = function(torrent) {
+    return Promise.resolve(torrent);
+};
+
+Session.prototype.getCachedTorrentIfExists = function(infoHash) {
+    const cached = path.resolve(TORRENT_CACHE_DIR, infoHash);
+    return Promise.resolve((fs.existsSync(cached)) ? cached : infoHash);
+};
+
+Session.prototype.addTorrentIfNotExists = function(infoHash) {
+    var me = this;
+    var torrent = this._client.get(infoHash);
+    if (torrent) return Promise.resolve(torrent);
+    return new Promise(function(resolve, reject) {
+        me.getCachedTorrentIfExists(infoHash).then(function(torrentFileOrCache) {
+            console.log('Trying to add torrent', infoHash);
+            me._client.add( 
+                torrentFileOrCache,
+                { path: path.resolve(me._directory, infoHash)  },
+                function(torrent) {
+                    torrent.deselect(0, torrent.pieces.length - 1, false)
+                    console.log('Torrent ready', infoHash);
+                    resolve(torrent);
+                    me.cacheTorrent(torrent);
+                }
+            );
+        });
+    });
+};
+
+
+// Data layer routines
 Session.prototype.getTracks = function(params, cb) {
     this._user.getTracks()
         .then(function(tracks) {

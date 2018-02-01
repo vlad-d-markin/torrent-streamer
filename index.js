@@ -11,7 +11,10 @@ const compiler = require('webpack')(webpackConfig);
 app.use(bodyBarser.json());
 
 var usersController = require('./backend/controllers/users');
+
 app.post('/login', usersController.login);
+app.get('/stream/:infoHash/:index', usersController.handleStreamRequest);
+
 io.on('connection', usersController.handleUserConnenct);
 
 // Webpack devserver
@@ -25,9 +28,9 @@ app.use(require("webpack-hot-middleware")(compiler, {
 var port = process.env.PORT || 8080;
 server.listen(port,  function() {
     // db.sync({force: true}).then(function() {
-    db.sync().then(function() {
-        require('./backend/testData')(function() { });
-    });
+//     db.sync().then(function() {
+//         require('./backend/testData')(function() { });
+//     });
 
     console.log('Server is up at' ,port);
 });
